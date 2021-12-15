@@ -8,5 +8,17 @@ ctx.canvas.height = window.innerHeight;
 
 const djGrid = new Grid([500,500], [1,50], 42)
 
-djGrid.render(ctx, [0,0], [ctx.canvas.width / 2, ctx.canvas.height])
 
+// for (let i = 0; i < 10; i++){
+
+// }
+djGrid.render(ctx, [0,0], [ctx.canvas.width / 2, ctx.canvas.height])
+setInterval(() => {
+    for (let i = 0; i < 40; i++){
+        djGrid.step(ctx, [ctx.canvas.width / 2, ctx.canvas.height])
+    }
+    // djGrid.render(ctx, [0,0], [ctx.canvas.width / 2, ctx.canvas.height])
+},1)
+// for (let i =0; i < 100000; i++){
+//     djGrid.step(ctx, [ctx.canvas.width / 2, ctx.canvas.height])
+// }
