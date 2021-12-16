@@ -23,7 +23,7 @@ export default class Grid {
             this.grid.push([])
             for (let c = 0; c < size[0]; c++) {
                 // console.log({yeet: (noise.perlin2(c / size[0], r / size[1]) + 1) / 2})
-                this.grid[r].push(Math.floor((noise.perlin2(c / 50, r / 50) + 1) / 2 * this.span) + range[0])
+                this.grid[r].push(Math.floor((noise.perlin2(c / 100, r / 100) + 1) / 2 * this.span) + range[0])
             }
         }
 
@@ -45,8 +45,9 @@ export default class Grid {
 
         for (let r = 0; r < this.size[1]; r++) {
             for (let c = 0; c < this.size[0]; c++) {
-                ctx.fillStyle = `hsl(${(this.grid[r][c] - this.range[0]) / this.span * 360} 100% 60%)`;
+                ctx.fillStyle = `rgb(${255 - (this.grid[r][c] - this.range[0]) / this.span * 255},${255 - (this.grid[r][c] - this.range[0]) / this.span * 255}, ${255 - (this.grid[r][c] - this.range[0]) / this.span * 255})`;
                 ctx.fillRect(topLeft[0] + c * wpp, topLeft[1] + r * hpp, wpp, hpp);
+                ctx.globalAlpha = 1
             }
         }
 
@@ -95,7 +96,7 @@ export default class Grid {
                 }
                 const p = this.rowColToEncPoint(r + tr, c + tc)
                 if (!this.visited.has(p)) {
-                    points.push({ weight: cur.weight + Math.max(this.grid[r+tr][c+tc] - this.grid[r][c], 0), point: p, heuristic: this.heurToGoal(r+tr, c+tc) })
+                    points.push({ weight: cur.weight + Math.max(this.grid[r+tr][c+tc] - this.grid[r][c], 1), point: p, heuristic: this.heurToGoal(r+tr, c+tc) })
                 }
             }
         }
@@ -122,8 +123,10 @@ export default class Grid {
             // console.log(arr[0])
             // const current = Number(arr[0][0])
             const { r, c } = this.encPointToRowCol(current.element.point)
-            ctx.fillStyle = `black`;
+            ctx.fillStyle = `cyan`;
+            ctx.globalAlpha = 0.5;
             ctx.fillRect(topLeft[0] + c * wpp, topLeft[1] + r * hpp, wpp, hpp);
+            ctx.globalAlpha = 1
             // const weightCurrent = this.weightTo[arr[0][0]];
             // delete this.weightTo[arr[0][0]]
             // if(current.priority !== this.weightTo[current.element.point]){
@@ -137,7 +140,7 @@ export default class Grid {
                     this.done = true;
                     this.parents[a.point] = current.element.point;
                     let backpath = a.point
-                    ctx.fillStyle = `white`;
+                    ctx.fillStyle = `red`;
                     while (backpath != null) {
                         const { r, c } = this.encPointToRowCol(backpath)
                         const rb = r 
@@ -145,7 +148,8 @@ export default class Grid {
                         ctx.fillRect(topLeft[0] + cb * wpp, topLeft[1] + rb * hpp, wpp, hpp);
                         backpath = this.parents[backpath]
                     }
-                    console.log(this.parents[current.element.point])
+                    console.log(a.weight)
+                    // console.log(this.parents[current.element.point])
                     
                 }
             }
